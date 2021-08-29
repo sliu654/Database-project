@@ -1,0 +1,28 @@
+version: "3"
+
+services:
+  mysql:
+    image: mysql:5
+    ports:
+      - 3306:3306
+    environment:
+      - MYSQL_DATABASE=cs6400
+      - MYSQL_ROOT_USER=root
+      - MYSQL_ROOT_PASSWORD=team042
+    volumes:
+      - ./.mysql/initdb:/docker-entrypoint-initdb.d
+      - ./.mysql/datadir:/var/lib/mysql
+      - ./.mysql/my.cnf:/etc/mysql/conf.d/my.cnf
+    restart: always
+
+  myadmin:
+    image: phpmyadmin:latest
+    ports:
+      - 80:80
+    environment:
+      - PMA_HOST=mysql
+      - PMA_USER=root
+      - PMA_PASSWORD=team042
+    links:
+      - mysql
+    restart: always
